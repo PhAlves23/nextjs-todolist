@@ -209,9 +209,10 @@ export default function Task() {
                     </div>
                   ) : (
                     <h3
-                      className={`font-medium ${
+                      className={`cursor-pointer font-medium ${
                         task.status ? "text-gray-500 line-through" : ""
                       }`}
+                      onClick={() => handleUpdateTask(task.id, task.status)}
                     >
                       {task.title}
                     </h3>
