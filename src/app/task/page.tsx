@@ -9,6 +9,8 @@ import { Check, Edit, Loader2, Plus, X } from "lucide-react";
 import React, { FormEvent, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function Task() {
   const [isLoadingAddTask, setIsLoadingAddTask] = useState<boolean>(false);
   const [isLoadingDeleteTask, setIsLoadingDeleteTask] =
@@ -20,8 +22,10 @@ export default function Task() {
   const [editingTask, setEditingTask] = useState<string | null>(null);
   const [editingTaskTitle, setEditingTaskTitle] = useState<string>("");
 
+  console.log("baseURLbaseURLbaseURL", baseURL);
+
   const getTasks = useCallback(async () => {
-    const response = await fetch("http://localhost:3000/api/task", {
+    const response = await fetch(`${baseURL}/task`, {
       method: "GET",
     });
     const data = await response.json();
@@ -32,7 +36,7 @@ export default function Task() {
     try {
       setIsLoadingDeleteTask(true);
       setDeletingTaskId(id);
-      const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+      const response = await fetch(`${baseURL}/task/${id}`, {
         method: "DELETE",
       });
 
@@ -56,7 +60,7 @@ export default function Task() {
       e.preventDefault();
       setIsLoadingAddTask(true);
 
-      const response = await fetch(`http://localhost:3000/api/task`, {
+      const response = await fetch(`${baseURL}/task`, {
         method: "POST",
         body: JSON.stringify({
           title: title,
@@ -89,7 +93,7 @@ export default function Task() {
 
     setTasks(updatedTasks);
 
-    const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+    const response = await fetch(`${baseURL}/task/${id}`, {
       method: "PATCH",
     });
 
@@ -102,7 +106,7 @@ export default function Task() {
 
   async function handleUpdateTaskTitle(id: string) {
     try {
-      const response = await fetch(`http://localhost:3000/api/task/${id}`, {
+      const response = await fetch(`${baseURL}/task/${id}`, {
         method: "PUT",
         body: JSON.stringify({
           title: editingTaskTitle,
