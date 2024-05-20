@@ -1,3 +1,6 @@
+"use client";
+
+import { deleteTaskAction } from "@/actions/delete-task";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,30 +13,28 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Loader2, Trash2 } from "lucide-react";
+import { Task } from "@prisma/client";
+import { Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
-interface IAlertConfirmDeleteTaskProps {
-  taskId: string;
-  handleDeleteTask: (id: string) => void;
-  isLoadingDeleteTask: boolean;
-  deletingTaskId: string | null;
-}
+type DeleteTaskButtonProps = Pick<Task, "id">;
 
-export function AlertConfirmDeleteTask({
-  taskId,
-  handleDeleteTask,
-  isLoadingDeleteTask,
-  deletingTaskId,
-}: IAlertConfirmDeleteTaskProps) {
+export function DeleteTaskButton({ id }: DeleteTaskButtonProps) {
+  const handleDeleteTask = async () => {
+    try {
+      await deleteTaskAction(id);
+      toast.success("Tarefa removida com sucesso");
+    } catch (error) {
+      toast.error("Erro ao remover tarefa");
+      return;
+    }
+  };
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="icon">
-          {isLoadingDeleteTask && deletingTaskId === taskId ? (
-            <Loader2 className="animate-spin" />
-          ) : (
-            <Trash2 className="h-7 w-7" />
-          )}
+        <Button size="icon" variant="destructive">
+          <Trash2 className="h-4 w-4" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -48,8 +49,8 @@ export function AlertConfirmDeleteTask({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel>
-          <AlertDialogAction onClick={() => handleDeleteTask(taskId)}>
-            Continuar
+          <AlertDialogAction onClick={handleDeleteTask}>
+            Tenho certeza
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
