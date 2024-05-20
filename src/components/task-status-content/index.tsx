@@ -29,7 +29,7 @@ export function TaskStatusContent({
 
   return (
     <div className="flex items-center gap-2" onClick={handleClick}>
-      <Checkbox key={id} className="h-5 w-5" defaultChecked={status} />
+      <Checkbox key={id} className="h-5 w-5" checked={status} />
 
       <span
         className={cn(

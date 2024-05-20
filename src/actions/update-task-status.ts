@@ -8,7 +8,6 @@ export async function updateTaskStatusAction(
   id: Task["id"],
   status: Task["status"],
 ) {
-  console.log("updateTaskStatusAction", id, status);
   if (!id) {
     throw new Error("O id é obrigatório.");
   }
